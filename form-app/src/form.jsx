@@ -41,6 +41,39 @@ function Form() {
         }
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        let errors = validate();
+
+        if (errors.length) {
+            setErrorMessages(errors);
+        } else {
+            let user = {
+                name,
+                email,
+                phone,
+                phoneType,
+                staff,
+                bio,
+                checked
+            };
+            console.log(user);
+            setErrorMessages([])
+        }
+    };
+
+    const showErrors = () => {
+        if (!errorMessages.length) {
+            return null;
+        } else {
+            return (
+                <ul>
+                    {errorMessages.map(error => <li>{error}</li>)}
+                </ul>
+            )
+        }
+    };
 
     const validate = () => {
 
@@ -50,8 +83,10 @@ function Form() {
             errors.push("Name cannot be blank.");
         }
 
-        if(!email.includes('@') && email.includes('.')) {
+        if(email && (!email.includes('@') || !email.includes('.'))) {
             errors.push("Email must be in a valid format.");
+        } else if (!email) {
+            errors.push("Email cannot be blank.");
         }
 
         if(phone && phone.length !== 10) {
@@ -74,29 +109,32 @@ function Form() {
         }
 
         return errors;
-
-
     }
+
+
+
 
     return (
         <>
-            <form className='form'>
+            {showErrors()}
+            <form className='form' onSubmit={handleSubmit}>
                 <h2>Sign Up</h2>
-                <label for="name">Name:
+                <label htmlFor="name">Name:
                     <input id="name" type="text" value={name} onChange={handleChange('name')}/>
                 </label>
                 <br/>
-                <label for="email">Email:
+                <label htmlFor="email">Email:
                     <input id="email" type="text" value={email} onChange={handleChange('email')}/>
                 </label>
                 <br/>
-                <label for="phone">Phone Number:
+                <label htmlFor="phone">Phone Number:
                     <input id="phone" type="text" value={phone} onChange={handleChange('phone')}/>
                 </label>
                 <br/>
                 <select
                     name='phoneType'
                     value={phoneType}
+                    onChange={handleChange('phoneType')}
                 >
                     <option value="" disabled hidden >Select Phone Type</option>
                     <option value="home">Home</option>
@@ -104,14 +142,14 @@ function Form() {
                     <option value="mobile">Mobile</option>
                 </select>
                 <br/>
-                    Student<input id="staff-student" type="radio" name="staff" value="student"/> 
-                    Instructor<input id="staff-instructor" type="radio" name="staff" value="instructor"/>
+                    Student<input id="staff-student" type="radio" name="staff" onChange={handleChange('staff')} value="student"/> 
+                    Instructor<input id="staff-instructor" type="radio" name="staff" onChange={handleChange('staff')} value="instructor"/>
                 <br/>
-                <label for="bio">Bio:
-                    <input id="bio" type="textarea" value={bio}/>
+                <label htmlFor="bio">Bio:
+                    <input id="bio" type="textarea" onChange={handleChange('bio')} value={bio}/>
                 </label>
                 <br/>
-                Receive Email Notifications:<input id="checked" name="checked" type="checkbox" value="yes"/>
+                Receive Email Notifications:<input id="checked" name="checked" type="checkbox" onChange={handleChange('checked')} value="yes"/>
 
                 <br/>
 
