@@ -99,7 +99,6 @@ function Form() {
             errors.push("Phone type selected, but no phone number inputted.");
         }
 
-
         if (!(staff)) {
             errors.push("Please select student or instructor");
         }
@@ -110,9 +109,6 @@ function Form() {
 
         return errors;
     }
-
-
-
 
     return (
         <>
